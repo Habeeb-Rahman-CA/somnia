@@ -1,0 +1,169 @@
+<main class="detail-page">
+  <div class="detail-container" *ngIf="artwork">
+    <!-- Top Navigation Bar -->
+    <header class="detail-nav">
+      <a routerLink="/gallery" class="back-link">
+        ← Back to Gallery
+      </a>
+      <div class="action-buttons">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="exportSvg()"
+        >
+          Export SVG
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="exportPng()"
+        >
+          Export 2K PNG
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="reproduceInStudio()"
+        >
+          ⟲ Open in Studio
+        </button>
+      </div>
+    </header>
+
+    <!-- Large Canvas Preview -->
+    <section class="canvas-card">
+      <canvas #detailCanvas class="detail-canvas"></canvas>
+    </section>
+
+    <!-- Metadata & Inspection Layout -->
+    <div class="detail-grid">
+      <!-- Left Column: Artwork Overview & Sleep Snapshot -->
+      <section class="info-card">
+        <header class="card-header">
+          <span class="card-badge">Composition Metadata</span>
+          <h1 class="artwork-title">{{ artwork.title }}</h1>
+          <span class="creation-date">
+            Created on {{ artwork.createdAt | date: 'fullDate' }}
+          </span>
+        </header>
+
+        <div class="seed-box">
+          <div class="seed-text">
+            <span class="seed-label">Deterministic Seed</span>
+            <span class="seed-val">0x{{ artwork.seed.toString(16).toUpperCase() }}</span>
+          </div>
+          <button
+            type="button"
+            class="copy-btn"
+            (click)="copySeed()"
+            title="Copy Seed"
+          >
+            Copy
+          </button>
+        </div>
+
+        <div class="version-row">
+          <span class="version-label">Generator Version:</span>
+          <span class="version-value">v{{ artwork.generatorVersion }}</span>
+        </div>
+
+        <div class="notes-box" *ngIf="artwork.notes">
+          <strong class="notes-title">Dream Reflections:</strong>
+          <p class="notes-content">"{{ artwork.notes }}"</p>
+        </div>
+
+        <!-- Associated Sleep Record -->
+        <div class="sleep-box" *ngIf="artwork.sleepRecord as sr">
+          <h2 class="sleep-header">Associated Sleep Data</h2>
+          <div class="sleep-stats-grid">
+            <div class="stat-pill">
+              <span class="stat-name">Sleep Date</span>
+              <span class="stat-num">{{ sr.date }}</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-name">Time in Bed</span>
+              <span class="stat-num">{{ Math.floor(sr.timeInBedMinutes / 60) }}h {{ sr.timeInBedMinutes % 60 }}m</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-name">Schedule</span>
+              <span class="stat-num">{{ sr.bedtime }} → {{ sr.wakeTime }}</span>
+            </div>
+            <div class="stat-pill" *ngIf="sr.awakeMinutes">
+              <span class="stat-name">Time Awake</span>
+              <span class="stat-num">{{ sr.awakeMinutes }}m</span>
+            </div>
+            <div class="stat-pill" *ngIf="sr.deepSleepMinutes">
+              <span class="stat-name">Deep Sleep</span>
+              <span class="stat-num">{{ sr.deepSleepMinutes }}m</span>
+            </div>
+            <div class="stat-pill" *ngIf="sr.remSleepMinutes">
+              <span class="stat-name">REM Sleep</span>
+              <span class="stat-num">{{ sr.remSleepMinutes }}m</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Visual Parameters Table -->
+      <section class="info-card">
+        <header class="card-header">
+          <span class="card-badge">Engine Parameters</span>
+          <h2 class="section-title">Exact Simulation Configuration</h2>
+          <p class="section-desc">
+            These variables specify the exact state of the vector field and particle system.
+          </p>
+        </header>
+
+        <div class="params-table">
+          <div class="param-row">
+            <span class="p-name">Palette Theme</span>
+            <span class="p-value highlight">{{ artwork.config.parameters.palette.name }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Particle Count</span>
+            <span class="p-value">{{ artwork.config.parameters.particleCount }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Noise Scale</span>
+            <span class="p-value">{{ artwork.config.parameters.noiseScale.toFixed(4) }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Flow Strength</span>
+            <span class="p-value">{{ artwork.config.parameters.flowStrength.toFixed(2) }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Line Opacity</span>
+            <span class="p-value">{{ artwork.config.parameters.lineOpacity.toFixed(2) }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Trail Fade Rate</span>
+            <span class="p-value">{{ artwork.config.parameters.trailFadeRate.toFixed(2) }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Wave Amplitude</span>
+            <span class="p-value">{{ artwork.config.parameters.waveAmplitude.toFixed(2) }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Curl Turbulence</span>
+            <span class="p-value">{{ artwork.config.parameters.curlStrength.toFixed(2) }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Atmospheric Ribbons</span>
+            <span class="p-value">{{ artwork.config.parameters.layerDensity }}</span>
+          </div>
+          <div class="param-row">
+            <span class="p-name">Fixed Simulation Steps</span>
+            <span class="p-value">{{ artwork.config.simulationSteps }}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Not Found State -->
+  <div class="detail-container empty-detail" *ngIf="!isLoading && !artwork">
+    <p>Artwork not found.</p>
+    <a routerLink="/gallery" class="btn btn-secondary">Return to Gallery</a>
+  </div>
+</main>
+

@@ -1,0 +1,137 @@
+<main class="gallery-page">
+  <div class="gallery-container">
+    <header class="gallery-header">
+      <div class="header-badge">Archive</div>
+      <h1 class="gallery-title">Personal Dream Gallery</h1>
+      <p class="gallery-subtitle">
+        Your library of saved generative artwork. Every piece stores its deterministic seed and mathematical configuration for pixel-perfect reproduction.
+      </p>
+    </header>
+
+    <!-- Empty State -->
+    <section class="empty-state" *ngIf="artworks.length === 0">
+      <div class="empty-icon" aria-hidden="true">✦</div>
+      <h2 class="empty-title">Your Gallery is Awaiting Its First Dream</h2>
+      <p class="empty-desc">
+        Save artworks created from your sleep records in the Studio, or generate a sample composition to explore the gallery.
+      </p>
+      <div class="empty-actions">
+        <a routerLink="/sleep-entry" class="btn btn-primary">
+          ☾ Log Sleep Data
+        </a>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="createSampleArtwork()"
+        >
+          ✦ Generate Sample Artwork
+        </button>
+      </div>
+    </section>
+
+    <!-- Artworks Grid -->
+    <section class="gallery-grid" *ngIf="artworks.length > 0">
+      <article
+        class="art-card"
+        *ngFor="let art of artworks"
+        (click)="viewDetail(art)"
+        tabindex="0"
+        role="button"
+        (keydown.enter)="viewDetail(art)"
+      >
+        <div class="card-preview">
+          <img
+            *ngIf="art.thumbnailDataUrl"
+            [src]="art.thumbnailDataUrl"
+            [alt]="art.title"
+            class="preview-img"
+          />
+          <div
+            *ngIf="!art.thumbnailDataUrl"
+            class="preview-fallback"
+            [style.background]="art.config.parameters.palette.background"
+          >
+            <span class="preview-seed">
+              0x{{ art.seed.toString(16).toUpperCase() }}
+            </span>
+          </div>
+
+          <div class="preview-badge">
+            v{{ art.generatorVersion }}
+          </div>
+        </div>
+
+        <div class="card-body">
+          <h2 class="card-title">{{ art.title }}</h2>
+
+          <div class="card-meta">
+            <div class="meta-row" *ngIf="art.sleepRecord">
+              <span class="meta-label">Sleep:</span>
+              <span class="meta-value">
+                {{ art.sleepRecord.date }} ({{ Math.floor(art.sleepRecord.timeInBedMinutes / 60) }}h {{ art.sleepRecord.timeInBedMinutes % 60 }}m)
+              </span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Seed:</span>
+              <span class="meta-value font-mono">
+                0x{{ art.seed.toString(16).toUpperCase() }}
+              </span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Created:</span>
+              <span class="meta-value">
+                {{ art.createdAt | date: 'mediumDate' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-notes" *ngIf="art.notes">
+            "{{ art.notes }}"
+          </div>
+
+          <footer class="card-actions">
+            <button
+              type="button"
+              class="card-btn card-btn-reproduce"
+              title="Reproduce in Studio"
+              (click)="reproduce(art); $event.stopPropagation()"
+            >
+              ⟲ Reproduce
+            </button>
+            <button
+              type="button"
+              class="card-btn"
+              title="Export 2K PNG"
+              (click)="exportDirect(art, $event)"
+            >
+              ⤓ Export
+            </button>
+            <button
+              type="button"
+              class="card-btn card-btn-danger"
+              title="Delete Artwork"
+              (click)="promptDelete(art, $event)"
+            >
+              ✕
+            </button>
+          </footer>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <!-- Deletion Confirmation Modal -->
+  <app-confirmation-modal
+    [isOpen]="showDeleteModal"
+    title="Delete Artwork"
+    [message]="'Are you sure you want to delete \'' + (selectedForDeletion?.title || 'this artwork') + '\'? This action cannot be undone.'"
+    confirmLabel="Delete Permanently"
+    cancelLabel="Keep Artwork"
+    [isDanger]="true"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirmation-modal>
+</main>
+

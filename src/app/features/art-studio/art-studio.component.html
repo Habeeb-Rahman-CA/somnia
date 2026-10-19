@@ -1,0 +1,509 @@
+<main class="studio-container">
+  <!-- Immersive Canvas Artwork Area -->
+  <div class="canvas-viewport">
+    <canvas #artCanvas class="art-canvas"></canvas>
+
+    <!-- Top Floating Session Badge -->
+    <header class="canvas-overlay-top">
+      <div class="overlay-left">
+        <div class="sleep-pill" *ngIf="artworkService.currentSleepRecord$ | async as record">
+          <span class="pill-dot"></span>
+          <span class="pill-title">{{ record.date }}</span>
+          <span class="pill-divider">•</span>
+          <span class="pill-times">{{ record.bedtime }}–{{ record.wakeTime }}</span>
+          <span class="pill-divider">•</span>
+          <span class="pill-duration">
+            {{ Math.floor(record.timeInBedMinutes / 60) }}h {{ record.timeInBedMinutes % 60 }}m
+          </span>
+          <button
+            type="button"
+            class="pill-explainer-btn"
+            (click)="showMappingExplainer = !showMappingExplainer"
+            title="Inspect Sleep Mapping"
+            [attr.aria-expanded]="showMappingExplainer"
+          >
+            ℹ Mapping Rules
+          </button>
+        </div>
+      </div>
+
+      <div class="overlay-right">
+        <div class="seed-badge" title="Deterministic Generator Seed">
+          <span class="seed-label">SEED:</span>
+          <span class="seed-value">0x{{ params.seed.toString(16).toUpperCase() }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sleep Mapping Explainer Popover -->
+    <aside
+      class="mapping-popover"
+      *ngIf="showMappingExplainer && (artworkService.currentExplanation$ | async) as exp"
+    >
+      <div class="popover-header">
+        <h3 class="popover-title">Sleep-to-Art Mapping Derivation</h3>
+        <button
+          type="button"
+          class="popover-close"
+          (click)="showMappingExplainer = false"
+          aria-label="Close mapping info"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="popover-body">
+        <div class="mapping-item">
+          <span class="mapping-key">Visual Density</span>
+          <span class="mapping-val">{{ exp.particleCount }}</span>
+        </div>
+        <div class="mapping-item">
+          <span class="mapping-key">Color Atmosphere</span>
+          <span class="mapping-val">{{ exp.palette }}</span>
+        </div>
+        <div class="mapping-item">
+          <span class="mapping-key">Trajectory Direction</span>
+          <span class="mapping-val">{{ exp.directionBias }}</span>
+        </div>
+        <div class="mapping-item">
+          <span class="mapping-key">Noise Frequency</span>
+          <span class="mapping-val">{{ exp.noiseScale }}</span>
+        </div>
+        <div class="mapping-item">
+          <span class="mapping-key">Fluid Velocity</span>
+          <span class="mapping-val">{{ exp.flowStrength }}</span>
+        </div>
+        <div class="mapping-item">
+          <span class="mapping-key">Dream Waves</span>
+          <span class="mapping-val">{{ exp.waveAmplitude }}</span>
+        </div>
+        <div class="mapping-item">
+          <span class="mapping-key">Ribbon Strata</span>
+          <span class="mapping-val">{{ exp.layerDensity }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Floating Action Dock -->
+    <nav class="canvas-dock" aria-label="Artwork controls dock">
+      <div class="dock-inner">
+        <!-- Play / Pause -->
+        <button
+          type="button"
+          class="dock-btn"
+          [class.active]="isPaused"
+          (click)="togglePause()"
+          title="Pause / Resume Animation (Space)"
+          [attr.aria-label]="isPaused ? 'Resume animation' : 'Pause animation'"
+        >
+          <span class="dock-icon">{{ isPaused ? '▶' : '⏸' }}</span>
+          <span class="dock-text">{{ isPaused ? 'Resume' : 'Pause' }}</span>
+        </button>
+
+        <!-- Regenerate Seed -->
+        <button
+          type="button"
+          class="dock-btn"
+          (click)="regenerateSeed()"
+          title="Regenerate Seed (R)"
+          aria-label="Generate new random seed"
+        >
+          <span class="dock-icon">↺</span>
+          <span class="dock-text">Regenerate</span>
+        </button>
+
+        <!-- Parameter Controls Drawer Toggle -->
+        <button
+          type="button"
+          class="dock-btn"
+          [class.active]="showControlsDrawer"
+          (click)="showControlsDrawer = !showControlsDrawer"
+          title="Customize Visual Parameters"
+          [attr.aria-expanded]="showControlsDrawer"
+        >
+          <span class="dock-icon">⚙</span>
+          <span class="dock-text">Adjust</span>
+        </button>
+
+        <!-- Reset Settings -->
+        <button
+          type="button"
+          class="dock-btn"
+          (click)="resetToSleepDefaults()"
+          title="Reset to Sleep-Derived Defaults"
+          aria-label="Reset visual parameters to sleep defaults"
+        >
+          <span class="dock-icon">⟲</span>
+          <span class="dock-text">Reset</span>
+        </button>
+
+        <div class="dock-separator"></div>
+
+        <!-- Save to Gallery -->
+        <button
+          type="button"
+          class="dock-btn dock-btn-highlight"
+          (click)="openSaveModal()"
+          title="Save Artwork to Gallery"
+          aria-label="Save composition to gallery"
+        >
+          <span class="dock-icon">💾</span>
+          <span class="dock-text">Save</span>
+        </button>
+
+        <!-- Export Artwork -->
+        <button
+          type="button"
+          class="dock-btn dock-btn-export"
+          (click)="openExportModal()"
+          title="Export High-Resolution Image"
+          aria-label="Export high resolution artwork"
+        >
+          <span class="dock-icon">⤓</span>
+          <span class="dock-text">Export</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Slide-Over Parameters Drawer -->
+  <aside
+    class="controls-drawer"
+    [class.open]="showControlsDrawer"
+    role="region"
+    aria-label="Artwork visual parameters"
+  >
+    <header class="drawer-header">
+      <div class="drawer-header-title">
+        <h2 class="drawer-title">Generative Parameters</h2>
+        <span class="drawer-desc">Fine-tune the mathematical simulation</span>
+      </div>
+      <button
+        type="button"
+        class="drawer-close"
+        (click)="showControlsDrawer = false"
+        aria-label="Close parameters drawer"
+      >
+        &times;
+      </button>
+    </header>
+
+    <div class="drawer-body">
+      <!-- Color Palette Picker -->
+      <section class="param-section">
+        <label class="param-label">Color Palette Theme</label>
+        <div class="palettes-grid">
+          <button
+            type="button"
+            *ngFor="let pal of palettes"
+            class="palette-card"
+            [class.selected]="pal.id === selectedPaletteId"
+            (click)="onPaletteSelect(pal.id)"
+          >
+            <div class="palette-swatch-row">
+              <span
+                *ngFor="let c of pal.particleColors.slice(0, 5)"
+                class="swatch-circle"
+                [style.background]="c"
+              ></span>
+            </div>
+            <span class="palette-name">{{ pal.name }}</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Particle Count -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="particleCount" class="param-label">Particle Count</label>
+          <span class="slider-value">{{ params.particleCount }}</span>
+        </div>
+        <input
+          id="particleCount"
+          type="range"
+          min="500"
+          max="4000"
+          step="100"
+          [(ngModel)]="params.particleCount"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Number of simultaneous tracer filaments in simulation.</span>
+      </div>
+
+      <!-- Noise Scale -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="noiseScale" class="param-label">Noise Scale (Frequency)</label>
+          <span class="slider-value">{{ params.noiseScale.toFixed(4) }}</span>
+        </div>
+        <input
+          id="noiseScale"
+          type="range"
+          min="0.0010"
+          max="0.0120"
+          step="0.0005"
+          [(ngModel)]="params.noiseScale"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Lower = broad sweeping currents; Higher = tight complex eddies.</span>
+      </div>
+
+      <!-- Flow Strength -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="flowStrength" class="param-label">Flow Strength (Speed)</label>
+          <span class="slider-value">{{ params.flowStrength.toFixed(1) }}</span>
+        </div>
+        <input
+          id="flowStrength"
+          type="range"
+          min="0.5"
+          max="5.0"
+          step="0.1"
+          [(ngModel)]="params.flowStrength"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Linear particle velocity along vector lines.</span>
+      </div>
+
+      <!-- Line Opacity -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="lineOpacity" class="param-label">Line Opacity</label>
+          <span class="slider-value">{{ params.lineOpacity.toFixed(2) }}</span>
+        </div>
+        <input
+          id="lineOpacity"
+          type="range"
+          min="0.02"
+          max="0.25"
+          step="0.01"
+          [(ngModel)]="params.lineOpacity"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Transparency of individual tracer segments.</span>
+      </div>
+
+      <!-- Trail Fade Rate -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="trailFadeRate" class="param-label">Trail Fade Rate</label>
+          <span class="slider-value">{{ params.trailFadeRate.toFixed(2) }}</span>
+        </div>
+        <input
+          id="trailFadeRate"
+          type="range"
+          min="0.01"
+          max="0.12"
+          step="0.005"
+          [(ngModel)]="params.trailFadeRate"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Lower = persistent luminous trails; Higher = ephemeral sparks.</span>
+      </div>
+
+      <!-- Wave Amplitude -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="waveAmplitude" class="param-label">Wave Amplitude</label>
+          <span class="slider-value">{{ params.waveAmplitude.toFixed(2) }}</span>
+        </div>
+        <input
+          id="waveAmplitude"
+          type="range"
+          min="0.0"
+          max="1.5"
+          step="0.05"
+          [(ngModel)]="params.waveAmplitude"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Harmonic undulation applied across vector angles.</span>
+      </div>
+
+      <!-- Curl Strength -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="curlStrength" class="param-label">Curl Turbulence</label>
+          <span class="slider-value">{{ params.curlStrength.toFixed(2) }}</span>
+        </div>
+        <input
+          id="curlStrength"
+          type="range"
+          min="0.0"
+          max="1.0"
+          step="0.05"
+          [(ngModel)]="params.curlStrength"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Incompressible rotational swirl (divergence-free flow).</span>
+      </div>
+
+      <!-- Background Layers -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label for="layerDensity" class="param-label">Atmospheric Ribbons</label>
+          <span class="slider-value">{{ params.layerDensity }}</span>
+        </div>
+        <input
+          id="layerDensity"
+          type="range"
+          min="2"
+          max="8"
+          step="1"
+          [(ngModel)]="params.layerDensity"
+          (ngModelChange)="onParameterChange()"
+          class="slider"
+        />
+        <span class="slider-subtext">Deep contour ribbon strata rendered in background.</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Save to Gallery Modal -->
+  <div
+    *ngIf="showSaveModal"
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="saveModalTitle"
+  >
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3 id="saveModalTitle" class="modal-title">Save Artwork to Gallery</h3>
+      </header>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="artworkTitle" class="form-label">Composition Title</label>
+          <input
+            id="artworkTitle"
+            type="text"
+            class="form-control"
+            [(ngModel)]="artworkTitle"
+            placeholder="e.g. Cerulean Reverie"
+          />
+        </div>
+        <div class="form-group" style="margin-top: 1rem;">
+          <label for="artworkNotes" class="form-label">Reflection Notes (Optional)</label>
+          <textarea
+            id="artworkNotes"
+            class="form-control"
+            rows="3"
+            [(ngModel)]="artworkNotes"
+            placeholder="Reflections on this sleep state or visual mood..."
+          ></textarea>
+        </div>
+      </div>
+      <footer class="modal-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="showSaveModal = false"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="confirmSaveArtwork()"
+        >
+          Save Artwork
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Export High-Resolution Modal -->
+  <div
+    *ngIf="showExportModal"
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="exportModalTitle"
+  >
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3 id="exportModalTitle" class="modal-title">Export Deterministic Artwork</h3>
+      </header>
+      <div class="modal-body">
+        <p class="export-note">
+          Somnia renders the export offscreen using a deterministic fixed-step simulation. The downloaded image will match this exact composition with zero distortion.
+        </p>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label">File Format</label>
+          <div class="format-options">
+            <label class="radio-label">
+              <input
+                type="radio"
+                name="exportFormat"
+                value="png"
+                [(ngModel)]="exportFormat"
+              />
+              High-Res PNG (Raster with Ambient Glow)
+            </label>
+            <label class="radio-label">
+              <input
+                type="radio"
+                name="exportFormat"
+                value="svg"
+                [(ngModel)]="exportFormat"
+              />
+              Genuine Vector SVG (Scalable XML Paths)
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="exportFormat === 'png'" style="margin-top: 1rem;">
+          <label class="form-label">Target Resolution</label>
+          <div class="format-options">
+            <label class="radio-label">
+              <input
+                type="radio"
+                name="exportResolution"
+                value="2k"
+                [(ngModel)]="exportResolution"
+              />
+              2K QHD (2400 × 1600 px)
+            </label>
+            <label class="radio-label">
+              <input
+                type="radio"
+                name="exportResolution"
+                value="4k"
+                [(ngModel)]="exportResolution"
+              />
+              4K UHD (3840 × 2160 px)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="showExportModal = false"
+          [disabled]="isExporting"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="executeExport()"
+          [disabled]="isExporting"
+        >
+          <span *ngIf="!isExporting">Download {{ exportFormat.toUpperCase() }}</span>
+          <span *ngIf="isExporting">Generating...</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+</main>
+
