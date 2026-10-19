@@ -1,44 +1,52 @@
 <main class="sleep-entry-page">
   <div class="entry-container">
     <header class="entry-header">
-      <div class="header-badge">Input Session</div>
-      <h1 class="entry-title">Record Your Nocturnal Journey</h1>
+      <span class="header-numeral">NOCTURNE PROTOCOL</span>
+      <h1 class="entry-title">Circadian Ledger</h1>
       <p class="entry-subtitle">
-        Enter your sleep times and observations. Somnia translates your circadian rhythms into unique vector fields and organic particle flow paths.
+        Record the temporal boundaries of sleep. The system converts circadian intervals into mathematical vector fields and ink trajectories.
       </p>
     </header>
 
-    <!-- Preset Selection Pills -->
+    <!-- Minimalist Preset Icons -->
     <section class="preset-section" aria-label="Sleep presets">
-      <span class="preset-label">Quick Presets:</span>
+      <span class="preset-label">PRESETS</span>
       <div class="preset-buttons">
         <button
           type="button"
-          class="preset-btn"
+          class="preset-icon-btn"
           (click)="applyPreset('balanced')"
+          title="Balanced Rest: 23:00 → 07:15 (7h 45m)"
+          aria-label="Preset I: Balanced Rest"
         >
-          ✦ Balanced Rest (7h 45m)
+          <span class="preset-glyph">I</span>
         </button>
         <button
           type="button"
-          class="preset-btn"
+          class="preset-icon-btn"
           (click)="applyPreset('night-owl')"
+          title="Night Owl: 02:30 → 10:00"
+          aria-label="Preset II: Night Owl"
         >
-          ☾ Night Owl (02:30–10:00)
+          <span class="preset-glyph">II</span>
         </button>
         <button
           type="button"
-          class="preset-btn"
+          class="preset-icon-btn"
           (click)="applyPreset('early-bird')"
+          title="Early Bird: 21:30 → 05:45"
+          aria-label="Preset III: Early Bird"
         >
-          ☀ Early Bird (21:30–05:45)
+          <span class="preset-glyph">III</span>
         </button>
         <button
           type="button"
-          class="preset-btn"
+          class="preset-icon-btn"
           (click)="applyPreset('restless')"
+          title="Restless Night: 00:15 → 06:30"
+          aria-label="Preset IV: Restless Night"
         >
-          〰 Restless Night
+          <span class="preset-glyph">IV</span>
         </button>
       </div>
     </section>
@@ -49,7 +57,7 @@
         <!-- Date -->
         <div class="form-group">
           <label for="sleepDate" class="form-label">
-            Sleep Date <span class="required">*</span>
+            Commencement Date <span class="required">*</span>
           </label>
           <input
             id="sleepDate"
@@ -60,7 +68,6 @@
             (ngModelChange)="recalculate()"
             required
           />
-          <span class="input-hint">The calendar date on which sleep commenced.</span>
           <span class="error-text" *ngIf="validationResult.errors['date']">
             {{ validationResult.errors['date'] }}
           </span>
@@ -69,7 +76,7 @@
         <!-- Bedtime -->
         <div class="form-group">
           <label for="bedtime" class="form-label">
-            Bedtime (24h) <span class="required">*</span>
+            Bedtime (24H) <span class="required">*</span>
           </label>
           <input
             id="bedtime"
@@ -80,7 +87,6 @@
             (ngModelChange)="recalculate()"
             required
           />
-          <span class="input-hint">Influences ambient color palette & nocturnal tone.</span>
           <span class="error-text" *ngIf="validationResult.errors['bedtime']">
             {{ validationResult.errors['bedtime'] }}
           </span>
@@ -89,7 +95,7 @@
         <!-- Wake Time -->
         <div class="form-group">
           <label for="wakeTime" class="form-label">
-            Wake-Up Time (24h) <span class="required">*</span>
+            Wake Time (24H) <span class="required">*</span>
           </label>
           <input
             id="wakeTime"
@@ -100,7 +106,6 @@
             (ngModelChange)="recalculate()"
             required
           />
-          <span class="input-hint">Directs global vector field orientation towards dawn.</span>
           <span class="error-text" *ngIf="validationResult.errors['wakeTime']">
             {{ validationResult.errors['wakeTime'] }}
           </span>
@@ -109,7 +114,7 @@
         <!-- Awake Time -->
         <div class="form-group">
           <label for="awakeMinutes" class="form-label">
-            Estimated Awake Time (minutes)
+            Awake Duration (Minutes)
           </label>
           <input
             id="awakeMinutes"
@@ -120,32 +125,29 @@
             [(ngModel)]="awakeMinutes"
             name="awakeMinutes"
             (ngModelChange)="recalculate()"
-            placeholder="e.g. 20"
+            placeholder="0"
           />
-          <span class="input-hint">Intermittent wakefulness during the sleep session.</span>
           <span class="error-text" *ngIf="validationResult.errors['awakeMinutes']">
             {{ validationResult.errors['awakeMinutes'] }}
           </span>
         </div>
       </div>
 
-      <!-- Live Calculation Banner -->
+      <!-- Monochrome Calculation Ledger Banner -->
       <aside
         class="calculation-banner"
         [class.has-error]="!validationResult.isValid"
         aria-live="polite"
       >
-        <div class="banner-icon" aria-hidden="true">
-          {{ validationResult.isValid ? '✔' : '⚠' }}
-        </div>
+        <div class="banner-border-line"></div>
         <div class="banner-content">
           <strong class="banner-title">
-            {{ validationResult.isValid ? 'Sleep Interval Calculation' : 'Validation Error' }}
+            {{ validationResult.isValid ? 'INTERVAL DERIVATION' : 'VALIDATION REJECTION' }}
           </strong>
           <p class="banner-desc">{{ validationResult.durationExplanation }}</p>
           <div class="warnings" *ngIf="validationResult.warnings.length > 0">
             <span class="warning-pill" *ngFor="let w of validationResult.warnings">
-              ℹ {{ w }}
+              {{ w }}
             </span>
           </div>
           <div class="error-text" *ngIf="validationResult.errors['duration']">
@@ -158,24 +160,28 @@
       <section class="stages-section">
         <header class="stages-toggle-row">
           <div>
-            <h2 class="stages-title">Sleep Stage Measurements (Optional)</h2>
-            <p class="stages-subtitle">
-              If your sleep tracker or wearable records stages, enter them below. Somnia will never fabricate missing stages.
-            </p>
+            <h2 class="stages-title">Sleep Architecture (Optional)</h2>
+            <p class="stages-subtitle">Deep, REM, and light sleep measurements if documented by a tracker.</p>
           </div>
           <button
             type="button"
-            class="toggle-btn"
+            class="icon-toggle-btn"
             (click)="showStages = !showStages"
+            [title]="showStages ? 'Collapse' : 'Expand'"
             [attr.aria-expanded]="showStages"
           >
-            {{ showStages ? 'Hide Stages ▲' : 'Show Stages ▼' }}
+            <svg *ngIf="!showStages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+            <svg *ngIf="showStages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="18 15 12 9 6 15" />
+            </svg>
           </button>
         </header>
 
         <div class="stages-grid" *ngIf="showStages">
           <div class="form-group">
-            <label for="deepSleep" class="form-label">Deep Sleep (minutes)</label>
+            <label for="deepSleep" class="form-label">Deep Sleep (Minutes)</label>
             <input
               id="deepSleep"
               type="number"
@@ -184,16 +190,15 @@
               [(ngModel)]="deepSleepMinutes"
               name="deepSleep"
               (ngModelChange)="recalculate()"
-              placeholder="e.g. 90"
+              placeholder="0"
             />
-            <span class="input-hint">Deep restorative delta waves; enriches contour layers.</span>
             <span class="error-text" *ngIf="validationResult.errors['deepSleepMinutes']">
               {{ validationResult.errors['deepSleepMinutes'] }}
             </span>
           </div>
 
           <div class="form-group">
-            <label for="remSleep" class="form-label">REM Sleep (minutes)</label>
+            <label for="remSleep" class="form-label">REM Sleep (Minutes)</label>
             <input
               id="remSleep"
               type="number"
@@ -202,16 +207,15 @@
               [(ngModel)]="remSleepMinutes"
               name="remSleep"
               (ngModelChange)="recalculate()"
-              placeholder="e.g. 105"
+              placeholder="0"
             />
-            <span class="input-hint">Rapid eye movement; amplifies curl turbulence & wave amplitude.</span>
             <span class="error-text" *ngIf="validationResult.errors['remSleepMinutes']">
               {{ validationResult.errors['remSleepMinutes'] }}
             </span>
           </div>
 
           <div class="form-group">
-            <label for="lightSleep" class="form-label">Light Sleep (minutes)</label>
+            <label for="lightSleep" class="form-label">Light Sleep (Minutes)</label>
             <input
               id="lightSleep"
               type="number"
@@ -220,9 +224,8 @@
               [(ngModel)]="lightSleepMinutes"
               name="lightSleep"
               (ngModelChange)="recalculate()"
-              placeholder="e.g. 250"
+              placeholder="0"
             />
-            <span class="input-hint">Light transitional sleep; provides calm particle currents.</span>
             <span class="error-text" *ngIf="validationResult.errors['lightSleepMinutes']">
               {{ validationResult.errors['lightSleepMinutes'] }}
             </span>
@@ -235,26 +238,30 @@
 
       <!-- Sleep Notes & Reflections -->
       <div class="form-group notes-group">
-        <label for="sleepNotes" class="form-label">Dream Reflections & Notes</label>
+        <label for="sleepNotes" class="form-label">Dream Inscriptions & Notes</label>
         <textarea
           id="sleepNotes"
           class="form-control textarea"
           rows="3"
           [(ngModel)]="notes"
           name="sleepNotes"
-          placeholder="Describe dream atmospheres, emotions upon waking, or restful thoughts..."
+          placeholder="Inscribe dream imagery, consciousness states, or waking reflections..."
         ></textarea>
       </div>
 
-      <!-- Actions -->
+      <!-- Icon-Only Generate CTA -->
       <footer class="form-actions">
         <button
           type="submit"
-          class="btn-submit"
+          class="btn-icon-submit"
           [disabled]="!validationResult.isValid"
+          title="Commit to Canvas"
+          aria-label="Commit to Canvas"
         >
-          <span class="submit-sparkle">✦</span>
-          Save & Generate Art
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
         </button>
       </footer>
     </form>
@@ -262,8 +269,8 @@
     <!-- Historical Records List -->
     <section class="history-section" *ngIf="savedRecords.length > 0">
       <header class="history-header">
-        <h2 class="history-title">Saved Sleep Records ({{ savedRecords.length }})</h2>
-        <span class="history-subtitle">Select any entry to load it into the generative art studio</span>
+        <h2 class="history-title">Ledger Archives</h2>
+        <span class="history-subtitle">RECORDS: {{ savedRecords.length }}</span>
       </header>
 
       <div class="records-grid">
@@ -280,19 +287,22 @@
             <button
               type="button"
               class="btn-delete-rec"
-              title="Delete record"
-              aria-label="Delete sleep record"
+              title="Delete Record"
+              aria-label="Delete Record"
               (click)="deleteHistoricalRecord(rec, $event)"
             >
-              ✕
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
             </button>
           </div>
           <div class="record-times">
-            <span>☾ {{ rec.bedtime }} → ☀ {{ rec.wakeTime }}</span>
+            <span>{{ rec.bedtime }} → {{ rec.wakeTime }}</span>
           </div>
           <div class="record-duration">
-            {{ Math.floor(rec.timeInBedMinutes / 60) }}h {{ rec.timeInBedMinutes % 60 }}m in bed
-            <span *ngIf="rec.awakeMinutes">({{ rec.awakeMinutes }}m awake)</span>
+            {{ Math.floor(rec.timeInBedMinutes / 60) }}h {{ rec.timeInBedMinutes % 60 }}m
+            <span *ngIf="rec.awakeMinutes">(-{{ rec.awakeMinutes }}m awake)</span>
           </div>
           <div class="record-notes" *ngIf="rec.notes">
             "{{ rec.notes }}"
@@ -302,4 +312,3 @@
     </section>
   </div>
 </main>
-

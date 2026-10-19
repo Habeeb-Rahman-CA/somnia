@@ -1,31 +1,53 @@
 <main class="detail-page">
   <div class="detail-container" *ngIf="artwork">
-    <!-- Top Navigation Bar -->
+    <!-- Top Navigation Bar (Icon-Only Actions) -->
     <header class="detail-nav">
-      <a routerLink="/gallery" class="back-link">
-        ← Back to Gallery
+      <a routerLink="/gallery" class="back-icon-btn" title="Return to Archive" aria-label="Return to Archive">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
       </a>
+
       <div class="action-buttons">
         <button
           type="button"
-          class="btn btn-secondary"
+          class="detail-icon-btn"
           (click)="exportSvg()"
+          title="Export Genuine Vector SVG"
+          aria-label="Export Vector SVG"
         >
-          Export SVG
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
         </button>
+
         <button
           type="button"
-          class="btn btn-secondary"
+          class="detail-icon-btn"
           (click)="exportPng()"
+          title="Export High-Resolution 2K PNG"
+          aria-label="Export 2K PNG"
         >
-          Export 2K PNG
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
         </button>
+
         <button
           type="button"
-          class="btn btn-primary"
+          class="detail-icon-btn detail-icon-primary"
           (click)="reproduceInStudio()"
+          title="Open in Generative Studio"
+          aria-label="Open in Generative Studio"
         >
-          ⟲ Open in Studio
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 3v18M3 12h18" stroke-dasharray="2 2" />
+          </svg>
         </button>
       </div>
     </header>
@@ -40,10 +62,10 @@
       <!-- Left Column: Artwork Overview & Sleep Snapshot -->
       <section class="info-card">
         <header class="card-header">
-          <span class="card-badge">Composition Metadata</span>
+          <span class="card-badge">CATALOG ENTRY</span>
           <h1 class="artwork-title">{{ artwork.title }}</h1>
           <span class="creation-date">
-            Created on {{ artwork.createdAt | date: 'fullDate' }}
+            {{ artwork.createdAt | date: 'fullDate' }}
           </span>
         </header>
 
@@ -54,11 +76,15 @@
           </div>
           <button
             type="button"
-            class="copy-btn"
+            class="copy-icon-btn"
             (click)="copySeed()"
-            title="Copy Seed"
+            title="Copy Seed to Clipboard"
+            aria-label="Copy Seed"
           >
-            Copy
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
           </button>
         </div>
 
@@ -68,36 +94,36 @@
         </div>
 
         <div class="notes-box" *ngIf="artwork.notes">
-          <strong class="notes-title">Dream Reflections:</strong>
+          <span class="notes-title">Inscription:</span>
           <p class="notes-content">"{{ artwork.notes }}"</p>
         </div>
 
         <!-- Associated Sleep Record -->
         <div class="sleep-box" *ngIf="artwork.sleepRecord as sr">
-          <h2 class="sleep-header">Associated Sleep Data</h2>
+          <h2 class="sleep-header">Circadian Record</h2>
           <div class="sleep-stats-grid">
             <div class="stat-pill">
-              <span class="stat-name">Sleep Date</span>
+              <span class="stat-name">DATE</span>
               <span class="stat-num">{{ sr.date }}</span>
             </div>
             <div class="stat-pill">
-              <span class="stat-name">Time in Bed</span>
+              <span class="stat-name">INTERVAL</span>
               <span class="stat-num">{{ Math.floor(sr.timeInBedMinutes / 60) }}h {{ sr.timeInBedMinutes % 60 }}m</span>
             </div>
             <div class="stat-pill">
-              <span class="stat-name">Schedule</span>
+              <span class="stat-name">SCHEDULE</span>
               <span class="stat-num">{{ sr.bedtime }} → {{ sr.wakeTime }}</span>
             </div>
             <div class="stat-pill" *ngIf="sr.awakeMinutes">
-              <span class="stat-name">Time Awake</span>
+              <span class="stat-name">AWAKE</span>
               <span class="stat-num">{{ sr.awakeMinutes }}m</span>
             </div>
             <div class="stat-pill" *ngIf="sr.deepSleepMinutes">
-              <span class="stat-name">Deep Sleep</span>
+              <span class="stat-name">DEEP</span>
               <span class="stat-num">{{ sr.deepSleepMinutes }}m</span>
             </div>
             <div class="stat-pill" *ngIf="sr.remSleepMinutes">
-              <span class="stat-name">REM Sleep</span>
+              <span class="stat-name">REM</span>
               <span class="stat-num">{{ sr.remSleepMinutes }}m</span>
             </div>
           </div>
@@ -107,36 +133,36 @@
       <!-- Right Column: Visual Parameters Table -->
       <section class="info-card">
         <header class="card-header">
-          <span class="card-badge">Engine Parameters</span>
+          <span class="card-badge">PROCEDURAL STATE</span>
           <h2 class="section-title">Exact Simulation Configuration</h2>
           <p class="section-desc">
-            These variables specify the exact state of the vector field and particle system.
+            Exact mathematical parameters driving the vector fields and particle traces.
           </p>
         </header>
 
         <div class="params-table">
           <div class="param-row">
-            <span class="p-name">Palette Theme</span>
+            <span class="p-name">Tonal Theme</span>
             <span class="p-value highlight">{{ artwork.config.parameters.palette.name }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Particle Count</span>
+            <span class="p-name">Filament Count</span>
             <span class="p-value">{{ artwork.config.parameters.particleCount }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Noise Scale</span>
+            <span class="p-name">Simplex Frequency</span>
             <span class="p-value">{{ artwork.config.parameters.noiseScale.toFixed(4) }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Flow Strength</span>
+            <span class="p-name">Current Velocity</span>
             <span class="p-value">{{ artwork.config.parameters.flowStrength.toFixed(2) }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Line Opacity</span>
+            <span class="p-name">Ink Opacity</span>
             <span class="p-value">{{ artwork.config.parameters.lineOpacity.toFixed(2) }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Trail Fade Rate</span>
+            <span class="p-name">Dissolution Rate</span>
             <span class="p-value">{{ artwork.config.parameters.trailFadeRate.toFixed(2) }}</span>
           </div>
           <div class="param-row">
@@ -144,11 +170,11 @@
             <span class="p-value">{{ artwork.config.parameters.waveAmplitude.toFixed(2) }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Curl Turbulence</span>
+            <span class="p-name">Incompressible Curl</span>
             <span class="p-value">{{ artwork.config.parameters.curlStrength.toFixed(2) }}</span>
           </div>
           <div class="param-row">
-            <span class="p-name">Atmospheric Ribbons</span>
+            <span class="p-name">Contour Strata</span>
             <span class="p-value">{{ artwork.config.parameters.layerDensity }}</span>
           </div>
           <div class="param-row">
@@ -163,7 +189,11 @@
   <!-- Not Found State -->
   <div class="detail-container empty-detail" *ngIf="!isLoading && !artwork">
     <p>Artwork not found.</p>
-    <a routerLink="/gallery" class="btn btn-secondary">Return to Gallery</a>
+    <a routerLink="/gallery" class="back-icon-btn" title="Return to Archive">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+    </a>
   </div>
 </main>
-

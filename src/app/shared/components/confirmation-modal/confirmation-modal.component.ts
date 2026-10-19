@@ -26,18 +26,25 @@ import { CommonModule } from '@angular/common';
         <footer class="modal-actions">
           <button
             type="button"
-            class="btn btn-secondary"
+            class="modal-btn"
             (click)="cancel.emit()"
+            title="Dismiss"
           >
-            {{ cancelLabel }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
           <button
             type="button"
-            class="btn"
-            [ngClass]="isDanger ? 'btn-danger' : 'btn-primary'"
+            class="modal-btn modal-btn-confirm"
+            [class.modal-btn-danger]="isDanger"
             (click)="confirm.emit()"
+            [title]="confirmLabel"
           >
-            {{ confirmLabel }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
           </button>
         </footer>
       </div>
@@ -48,8 +55,8 @@ import { CommonModule } from '@angular/common';
       .modal-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(4, 7, 16, 0.75);
-        backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(16px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -57,31 +64,31 @@ import { CommonModule } from '@angular/common';
         padding: 1.5rem;
       }
       .modal-card {
-        background: #0d1120;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 1rem;
+        background: #080808;
+        border: 1px solid rgba(255, 255, 255, 0.2);
         width: 100%;
-        max-width: 440px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 25px rgba(99, 102, 241, 0.15);
+        max-width: 420px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
         overflow: hidden;
-        animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .modal-header {
         padding: 1.5rem 1.5rem 0.75rem;
       }
       .modal-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #f1f5f9;
+        font-family: var(--font-art, serif);
+        font-size: 1.35rem;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+        color: #ffffff;
         margin: 0;
       }
       .modal-body {
         padding: 0 1.5rem 1.5rem;
       }
       .modal-message {
-        color: #94a3b8;
-        font-size: 0.9375rem;
-        line-height: 1.5;
+        color: #888888;
+        font-size: 0.875rem;
+        line-height: 1.6;
         margin: 0;
       }
       .modal-actions {
@@ -90,49 +97,48 @@ import { CommonModule } from '@angular/common';
         gap: 0.75rem;
         padding: 1rem 1.5rem;
         background: rgba(255, 255, 255, 0.02);
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
-      .btn {
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        font-weight: 500;
+      .modal-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        color: #888888;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        transition: all 0.15s ease;
-        border: 1px solid transparent;
+        padding: 0;
+        transition: all 0.2s ease;
       }
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.06);
-        color: #cbd5e1;
-        border-color: rgba(255, 255, 255, 0.1);
+      .modal-btn svg {
+        width: 16px;
+        height: 16px;
       }
-      .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
+      .modal-btn:hover {
+        border-color: #ffffff;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
       }
-      .btn-primary {
-        background: linear-gradient(135deg, #6366f1, #4f46e5);
-        color: #fff;
+      .modal-btn-confirm {
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
       }
-      .btn-primary:hover {
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+      .modal-btn-confirm:hover {
+        background: #d4d4d4;
+        color: #000000;
       }
-      .btn-danger {
-        background: #dc2626;
-        color: #fff;
+      .modal-btn-danger {
+        background: #ffffff;
+        color: #000000;
       }
-      .btn-danger:hover {
-        background: #b91c1c;
-      }
-      @keyframes scaleUp {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
+      .modal-btn-danger:hover {
+        background: #000000;
+        color: #ffffff;
+        border-color: #ffffff;
       }
     `,
   ],
@@ -155,4 +161,3 @@ export class ConfirmationModalComponent {
     }
   }
 }
-

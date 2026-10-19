@@ -10,57 +10,73 @@ import { ArtworkService } from '../../../core/services/artwork.service';
   template: `
     <header class="app-header">
       <div class="header-inner">
+        <!-- Logo / Brand -->
         <a routerLink="/studio" class="brand" aria-label="Somnia Home">
-          <div class="brand-glyph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-          </div>
-          <div class="brand-text">
+          <span class="brand-monogram">S</span>
+          <div class="brand-identity">
             <span class="brand-title">SOMNIA</span>
-            <span class="brand-tagline">Sleep Generative Art</span>
+            <span class="brand-edition">NOCTURNE • ED. I</span>
           </div>
         </a>
 
+        <!-- Minimalist Icon-Only Navigation -->
         <nav class="nav-links" aria-label="Main navigation">
           <a
             routerLink="/studio"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            class="nav-link"
+            class="nav-icon-btn"
+            title="Generative Studio"
+            aria-label="Generative Studio"
           >
-            <span class="nav-icon" aria-hidden="true">✦</span>
-            Studio
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 3v18M3 12h18" stroke-dasharray="2 2" />
+            </svg>
           </a>
+
           <a
             routerLink="/sleep-entry"
             routerLinkActive="active"
-            class="nav-link"
+            class="nav-icon-btn"
+            title="Log Sleep Data"
+            aria-label="Log Sleep Data"
           >
-            <span class="nav-icon" aria-hidden="true">☾</span>
-            Sleep Entry
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
           </a>
+
           <a
             routerLink="/gallery"
             routerLinkActive="active"
-            class="nav-link"
+            class="nav-icon-btn"
+            title="Art Gallery"
+            aria-label="Art Gallery"
           >
-            <span class="nav-icon" aria-hidden="true">❖</span>
-            Gallery
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
           </a>
+
           <a
             routerLink="/guide"
             routerLinkActive="active"
-            class="nav-link"
+            class="nav-icon-btn"
+            title="Mathematics & Algorithms"
+            aria-label="Mathematics & Algorithms"
           >
-            <span class="nav-icon" aria-hidden="true">∫</span>
-            Math & Science
+            <span class="glyph-integral" aria-hidden="true">∫</span>
           </a>
         </nav>
 
+        <!-- Monochromatic Sleep Status Indicator -->
         <div class="header-status" *ngIf="artworkService.currentSleepRecord$ | async as record">
           <div class="status-badge" title="Active Sleep Data">
-            <span class="pulse-dot"></span>
+            <span class="status-dot"></span>
             <span class="status-text">{{ record.date }} • {{ record.bedtime }}–{{ record.wakeTime }}</span>
           </div>
         </div>
@@ -73,15 +89,15 @@ import { ArtworkService } from '../../../core/services/artwork.service';
         position: sticky;
         top: 0;
         z-index: 1000;
-        background: rgba(7, 10, 20, 0.85);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
       .header-inner {
         max-width: 1440px;
         margin: 0 auto;
-        padding: 0.875rem 1.5rem;
+        padding: 0.75rem 2rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -90,74 +106,81 @@ import { ArtworkService } from '../../../core/services/artwork.service';
       .brand {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.85rem;
         text-decoration: none;
-        color: #fff;
+        color: #ffffff;
       }
-      .brand-glyph {
+      .brand-monogram {
+        font-family: var(--font-display, 'Cinzel', serif);
+        font-size: 1.25rem;
+        font-weight: 400;
         width: 32px;
         height: 32px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(45, 212, 191, 0.25));
-        border: 1px solid rgba(165, 180, 252, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #a5b4fc;
+        color: #ffffff;
+        transition: border-color 0.2s;
       }
-      .brand-glyph svg {
-        width: 18px;
-        height: 18px;
+      .brand:hover .brand-monogram {
+        border-color: #ffffff;
       }
-      .brand-text {
+      .brand-identity {
         display: flex;
         flex-direction: column;
       }
       .brand-title {
-        font-family: 'Inter', system-ui, sans-serif;
-        font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: 0.15em;
-        background: linear-gradient(135deg, #f1f5f9, #a5b4fc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-family: var(--font-display, 'Cinzel', serif);
+        font-size: 1.15rem;
+        font-weight: 500;
+        letter-spacing: 0.35em;
+        color: #ffffff;
       }
-      .brand-tagline {
-        font-size: 0.6875rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #64748b;
+      .brand-edition {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.6rem;
+        letter-spacing: 0.15em;
+        color: #666666;
+        margin-top: 1px;
       }
       .nav-links {
         display: flex;
         align-items: center;
-        gap: 0.375rem;
+        gap: 0.75rem;
       }
-      .nav-link {
+      .nav-icon-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        padding: 0.45rem 0.875rem;
-        border-radius: 0.5rem;
+        justify-content: center;
         text-decoration: none;
-        color: #94a3b8;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
+        color: #888888;
         border: 1px solid transparent;
+        background: transparent;
+        transition: all 0.2s ease;
       }
-      .nav-link:hover {
-        color: #e2e8f0;
-        background: rgba(255, 255, 255, 0.04);
+      .nav-icon-btn svg {
+        width: 18px;
+        height: 18px;
       }
-      .nav-link.active {
-        color: #a5b4fc;
-        background: rgba(99, 102, 241, 0.12);
-        border-color: rgba(99, 102, 241, 0.25);
+      .glyph-integral {
+        font-family: var(--font-art, serif);
+        font-size: 1.35rem;
+        font-style: italic;
+        line-height: 1;
       }
-      .nav-icon {
-        font-size: 0.9rem;
-        color: #818cf8;
+      .nav-icon-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .nav-icon-btn.active {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
       }
       .header-status {
         display: flex;
@@ -167,33 +190,29 @@ import { ArtworkService } from '../../../core/services/artwork.service';
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.35rem 0.75rem;
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        color: #cbd5e1;
+        padding: 0.35rem 0.85rem;
+        background: #000000;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-family: var(--font-mono, monospace);
+        font-size: 0.7rem;
+        color: #888888;
+        letter-spacing: 0.05em;
       }
-      .pulse-dot {
-        width: 6px;
-        height: 6px;
+      .status-dot {
+        width: 5px;
+        height: 5px;
         border-radius: 50%;
-        background: #2dd4bf;
-        box-shadow: 0 0 8px #2dd4bf;
+        background: #ffffff;
       }
       @media (max-width: 768px) {
         .header-status {
           display: none;
         }
         .header-inner {
-          padding: 0.75rem 1rem;
+          padding: 0.65rem 1rem;
         }
-        .brand-tagline {
+        .brand-edition {
           display: none;
-        }
-        .nav-link {
-          padding: 0.4rem 0.5rem;
-          font-size: 0.8125rem;
         }
       }
     `,
@@ -202,4 +221,3 @@ import { ArtworkService } from '../../../core/services/artwork.service';
 export class HeaderComponent {
   public artworkService = inject(ArtworkService);
 }
-

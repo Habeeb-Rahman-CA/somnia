@@ -1,20 +1,20 @@
 <main class="guide-page">
   <div class="guide-container">
     <header class="guide-header">
-      <div class="header-badge">Algorithms & Mathematical Visualization</div>
-      <h1 class="guide-title">The Mathematics Behind Somnia</h1>
+      <span class="header-numeral">TREATISE ON GENERATIVE FORM</span>
+      <h1 class="guide-title">Theoretical Foundations</h1>
       <p class="guide-subtitle">
-        An educational breakdown of procedural noise, vector fields, seeded pseudorandomness, and circadian algorithmic transformations.
+        Procedural determinism, continuous simplicial gradient fields, incompressible curl dynamics, and circadian translation equations.
       </p>
 
-      <nav class="guide-tabs" aria-label="Algorithm topics">
+      <nav class="guide-tabs" aria-label="Theoretical treatises">
         <button
           type="button"
           class="tab-btn"
           [class.active]="activeTab === 'prng'"
           (click)="setActiveTab('prng')"
         >
-          1. Seeded PRNG
+          I. Mulberry32 PRNG
         </button>
         <button
           type="button"
@@ -22,7 +22,7 @@
           [class.active]="activeTab === 'noise'"
           (click)="setActiveTab('noise')"
         >
-          2. 2D Simplex Noise
+          II. 2D Simplex Noise
         </button>
         <button
           type="button"
@@ -30,7 +30,7 @@
           [class.active]="activeTab === 'flow'"
           (click)="setActiveTab('flow')"
         >
-          3. Flow Fields & Curl
+          III. Incompressible Curl
         </button>
         <button
           type="button"
@@ -38,7 +38,7 @@
           [class.active]="activeTab === 'particles'"
           (click)="setActiveTab('particles')"
         >
-          4. Particle Kinematics
+          IV. Particle Trajectories
         </button>
         <button
           type="button"
@@ -46,7 +46,7 @@
           [class.active]="activeTab === 'sleep'"
           (click)="setActiveTab('sleep')"
         >
-          5. Sleep-to-Art Mapping
+          V. Circadian Mapping
         </button>
         <button
           type="button"
@@ -54,34 +54,34 @@
           [class.active]="activeTab === 'perf'"
           (click)="setActiveTab('perf')"
         >
-          6. Performance & Reproduction
+          VI. Precision & Reproduction
         </button>
       </nav>
     </header>
 
     <!-- Tab 1: Seeded Randomness -->
     <article class="content-card" *ngIf="activeTab === 'prng'">
-      <div class="card-tag">Procedural Determinism</div>
-      <h2 class="section-heading">Deterministic Pseudorandomness (Mulberry32)</h2>
+      <div class="card-tag">TREATISE I • DETERMINISTIC PSEUDORANDOMNESS</div>
+      <h2 class="section-heading">The Mulberry32 State Engine</h2>
       
       <p class="paragraph">
-        In standard JavaScript, <code>Math.random()</code> is non-deterministic and cannot be initialized with a custom seed. As a result, an artwork generated with <code>Math.random()</code> is completely lost the moment the tab is refreshed, and identical visual exports are impossible.
+        Standard JavaScript <code>Math.random()</code> lacks seed parameterization; its state cannot be serialized or replicated. In fine art procedural generation, determinism is essential: a composition must reproduce its exact line trajectories regardless of when or where it is evaluated.
       </p>
 
       <div class="math-box">
-        <span class="math-title">Mulberry32 State Evolution Algorithm:</span>
+        <span class="math-title">State Evolution Equation:</span>
         <pre class="code-block"><code>let t = (state += 0x6D2B79F5);
 t = Math.imul(t ^ (t >>> 15), t | 1);
 t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
 return ((t ^ (t >>> 14)) >>> 0) / 4294967296;</code></pre>
       </div>
 
-      <h3 class="sub-heading">Why Mulberry32?</h3>
+      <h3 class="sub-heading">Mathematical Properties</h3>
       <ul class="feature-list">
-        <li><strong>Full 32-bit state space:</strong> Period of 2<sup>32</sup> (~4.29 billion values) before repeating.</li>
-        <li><strong>Golden Ratio increment:</strong> <code>0x6D2B79F5</code> is derived from 2<sup>32</sup> / ϕ, ensuring maximal dispersion of initial state bits.</li>
-        <li><strong>Avalanche effect:</strong> Bitwise XOR shifts and integer multiplication (<code>Math.imul</code>) ensure that changing a single seed bit dramatically alters all subsequent pseudorandom values.</li>
-        <li><strong>Box-Muller Transform:</strong> Enables sampling normal Gaussian distributions for particle lifespan and spatial jitter:
+        <li><strong>Full 32-bit state space:</strong> Period of 2<sup>32</sup> (~4.29 billion values) before cycling.</li>
+        <li><strong>Golden Ratio constant:</strong> <code>0x6D2B79F5</code> is derived from 2<sup>32</sup> / ϕ, ensuring maximal dispersion of initial state bits.</li>
+        <li><strong>Bit Avalanche:</strong> Bitwise XOR shifts and integer multiplication ensure that altering a single seed bit cascades unpredictably through subsequent pseudorandom values.</li>
+        <li><strong>Box-Muller Normal Transform:</strong> Enables sampling normal Gaussian distributions for particle lifespan:
           <code>Z = √(-2 ln U₁) · cos(2π U₂)</code>.
         </li>
       </ul>
@@ -89,11 +89,11 @@ return ((t ^ (t >>> 14)) >>> 0) / 4294967296;</code></pre>
 
     <!-- Tab 2: Simplex Noise -->
     <article class="content-card" *ngIf="activeTab === 'noise'">
-      <div class="card-tag">Continuity & Gradient Fields</div>
-      <h2 class="section-heading">2D Simplex Noise Field</h2>
+      <div class="card-tag">TREATISE II • CONTINUOUS GRADIENT FIELDS</div>
+      <h2 class="section-heading">2D Simplex Geometry</h2>
 
       <p class="paragraph">
-        Traditional Perlin noise subdivides space into a square grid. This introduces noticeable directional bias and grid-aligned visual artifacts. Simplex noise replaces squares with a tessellation of equilateral triangles (simplices), producing isotropic continuity with zero grid bias.
+        Classic Perlin noise partitions coordinate space into rectilinear grids, imparting directional square bias and visual alignment seams. 2D Simplex noise tessellates space into an isotropic grid of equilateral triangles (simplices), producing continuous rotational symmetry.
       </p>
 
       <div class="math-box">
@@ -107,80 +107,76 @@ const t = (i + j) * 0.21132486540;
 const x0 = x - (i - t), y0 = y - (j - t);</code></pre>
       </div>
 
-      <h3 class="sub-heading">Mathematical Properties</h3>
+      <h3 class="sub-heading">Continuity & Scale</h3>
       <ul class="feature-list">
-        <li><strong>Radial Hermite Spline:</strong> Each vertex contributes based on distance: <code>(0.5 - r²)⁴ · (grad · dist)</code>. Because both value and derivative drop smoothly to zero at <code>r = √0.5</code>, the field has seamless <em>C¹ continuity</em> without visual seams.</li>
+        <li><strong>Radial Hermite Spline:</strong> Each vertex contributes: <code>(0.5 - r²)⁴ · (grad · dist)</code>. Because both magnitude and first derivative vanish smoothly at <code>r = √0.5</code>, the field exhibits seamless <em>C¹ continuity</em>.</li>
         <li><strong>Fractal Brownian Motion (fBM):</strong> Superimposes multiple harmonic octaves:
-          <code>fBM(x, y) = ∑ (noise(x · 2ⁱ, y · 2ⁱ) · 0.5ⁱ)</code>, introducing subtle micro-eddies alongside grand atmospheric swells.
+          <code>fBM(x, y) = ∑ (noise(x · 2ⁱ, y · 2ⁱ) · 0.5ⁱ)</code>.
         </li>
-        <li><strong>Influence of Scale:</strong> Low scale (&lt; 0.002) creates sweeping planetary laminar ribbons; higher scale (&gt; 0.008) yields tight labyrinthine whorls.</li>
       </ul>
     </article>
 
     <!-- Tab 3: Flow Fields & Curl -->
     <article class="content-card" *ngIf="activeTab === 'flow'">
-      <div class="card-tag">Vector Dynamics</div>
-      <h2 class="section-heading">Flow Fields and Curl Noise</h2>
+      <div class="card-tag">TREATISE III • VECTOR DYNAMICS</div>
+      <h2 class="section-heading">Incompressible Curl Noise</h2>
 
       <p class="paragraph">
-        A flow field converts continuous 2D scalar noise into a vector field V(x, y) = (v<sub>x</sub>, v<sub>y</sub>). Each point in space defines an angle θ:
+        A vector field assigns a velocity vector V(x, y) = (v<sub>x</sub>, v<sub>y</sub>) to every spatial coordinate. To avoid particle collapse into empty sinks, Somnia derives an incompressible curl component.
       </p>
 
       <div class="math-box">
-        <span class="math-title">Trigonometric Projection & Curl Formulation:</span>
+        <span class="math-title">Trigonometric Projection & Curl Equations:</span>
         <pre class="code-block"><code>θ = noise(x · scale, y · scale) · 2π + directionBias
 vx = cos(θ) · flowStrength
 vy = sin(θ) · flowStrength
 
-// Divergence-Free Incompressible Curl:
-// V_curl = (∂ψ/∂y, -∂ψ/∂x)  where  ∇ · V_curl = 0</code></pre>
+// Incompressible 2D Curl:
+// V_curl = (∂ψ/∂y, -∂ψ/∂x)  such that  ∇ · V_curl = 0</code></pre>
       </div>
 
-      <h3 class="sub-heading">Preventing Particle Clumping</h3>
+      <h3 class="sub-heading">Divergence-Free Fluid Currents</h3>
       <p class="paragraph">
-        In ordinary noise fields, particle trajectories tend to converge into sink lines, leaving vast expanses of the canvas empty. Somnia evaluates the numerical curl of the scalar potential field via central differences:
-        <code>∂n/∂x ≈ [n(x+ε) - n(x-ε)] / 2ε</code>. Because the divergence of the curl is identically zero, particles swirl around vortices like fluid currents without collapsing into dead sinks.
+        Because the divergence of the curl of any potential field is mathematically zero, particles trace fluid eddies indefinitely without clumping or leaving barren dead zones.
       </p>
     </article>
 
     <!-- Tab 4: Particle Kinematics -->
     <article class="content-card" *ngIf="activeTab === 'particles'">
-      <div class="card-tag">Simulation Kinematics</div>
-      <h2 class="section-heading">Particle Trajectories & Line Segment Rendering</h2>
+      <div class="card-tag">TREATISE IV • SIMULATION KINEMATICS</div>
+      <h2 class="section-heading">Filament Trajectories & Dissolution</h2>
 
       <p class="paragraph">
-        Instead of rendering thousands of disjoint dots, Somnia traces the continuous temporal history of each particle as a sequence of connected line segments.
+        Rather than disconnected points, Somnia records the temporal history of each tracer as connected line segments rendered in dilute monochrome inks.
       </p>
 
       <div class="math-box">
-        <span class="math-title">Euler Integration & Boundary Behavior:</span>
-        <pre class="code-block"><code>// Step position
-p.prevX = p.x;
+        <span class="math-title">Integration & Segment Drawing:</span>
+        <pre class="code-block"><code>p.prevX = p.x;
 p.prevY = p.y;
 p.x += p.vx;
 p.y += p.vy;
 
-// Draw line segment
 ctx.beginPath();
 ctx.moveTo(p.prevX, p.prevY);
 ctx.lineTo(p.x, p.y);
 ctx.stroke();</code></pre>
       </div>
 
-      <h3 class="sub-heading">Trail Decay & Screen Wrapping</h3>
+      <h3 class="sub-heading">Decay & Dissolution</h3>
       <ul class="feature-list">
-        <li><strong>Ethereal Decay Trails:</strong> On every animation tick, an ultra-faint semi-transparent rectangle of the background color (alpha 0.02 – 0.06) is blended over the canvas. Older lines slowly dissolve into atmospheric mist, mimicking fading dream memories.</li>
-        <li><strong>Toroidal Wrapping & Discontinuity Guard:</strong> When a particle wraps across boundary edges, its <code>prevX, prevY</code> are immediately re-centered to avoid rendering long streaks across the entire canvas.</li>
+        <li><strong>Atmospheric Decay:</strong> On each frame, an ultra-faint dark veil (alpha 0.02 – 0.06) washes across the canvas, gently dissolving older paths into memory.</li>
+        <li><strong>Toroidal Wrapping:</strong> Screen boundaries wrap particles seamlessly, resetting <code>prevX, prevY</code> to prevent cross-canvas visual lines.</li>
       </ul>
     </article>
 
     <!-- Tab 5: Sleep-to-Art Mapping -->
     <article class="content-card" *ngIf="activeTab === 'sleep'">
-      <div class="card-tag">Circadian Translation</div>
-      <h2 class="section-heading">Sleep-to-Art Mapping Rules</h2>
+      <div class="card-tag">TREATISE V • CIRCADIAN TRANSLATION</div>
+      <h2 class="section-heading">Circadian Mapping Equations</h2>
 
       <p class="paragraph">
-        Somnia transforms sleep sessions into aesthetic generative artwork through explicit, documented rules. These are poetic and artistic interpretations of rest, not medical diagnoses.
+        Somnia transforms sleep parameters into artistic variables through explicit, deterministic formulations:
       </p>
 
       <div class="mapping-table-wrap">
@@ -188,40 +184,40 @@ ctx.stroke();</code></pre>
           <thead>
             <tr>
               <th>Sleep Variable</th>
-              <th>Mathematical Art Parameter</th>
+              <th>Procedural Parameter</th>
               <th>Aesthetic Consequence</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Sleep Duration</strong></td>
-              <td>Particle Count (1000 – 3200)</td>
-              <td>Longer rest creates richer visual density and hundreds of micro-filaments.</td>
+              <td><strong>Duration</strong></td>
+              <td>Filament Density (1000 – 3200)</td>
+              <td>Longer rest creates denser layers of micro-filaments.</td>
             </tr>
             <tr>
               <td><strong>Bedtime</strong></td>
-              <td>Color Palette Selection</td>
-              <td>Early bedtimes evoke warm Twilight Velvet; midnight brings Cosmic Indigo; late night brings Bioluminescent Cyan.</td>
+              <td>Tonal Palette Theme</td>
+              <td>Early hours map to Etched Graphite; midnight to Nocturne Ink; late night to Obsidian Mist.</td>
             </tr>
             <tr>
-              <td><strong>Wake-Up Time</strong></td>
-              <td>Direction Bias θ<sub>wake</sub></td>
-              <td>Orients global trajectory angle <code>(wakeHour / 24) · 2π</code> towards the dawn horizon.</td>
+              <td><strong>Wake Time</strong></td>
+              <td>Flow Direction Bias θ<sub>wake</sub></td>
+              <td>Orients the vector field angle <code>(wakeHour / 24) · 2π</code> toward dawn.</td>
             </tr>
             <tr>
               <td><strong>Deep Sleep %</strong></td>
-              <td>Layer Density & Calmer Velocity</td>
-              <td>Adds deep contour ribbon strata and reduces frantic turbulence.</td>
+              <td>Contour Strata & Velocity</td>
+              <td>Increases background ribbon layers and stabilizes high-frequency jitter.</td>
             </tr>
             <tr>
               <td><strong>REM Sleep %</strong></td>
-              <td>Curl Vorticity & Wave Amplitude</td>
-              <td>Vivid dreaming increases fluid rotation and harmonic wave undulations.</td>
+              <td>Incompressible Curl & Waves</td>
+              <td>Dream activity intensifies vortex turbulence and harmonic wave amplitude.</td>
             </tr>
             <tr>
               <td><strong>Awake Minutes</strong></td>
-              <td>Line Opacity & Contrast</td>
-              <td>Intermittent wakefulness adds slight textural crispness to filaments.</td>
+              <td>Ink Opacity</td>
+              <td>Intermittent wakefulness yields higher silver-point line contrast.</td>
             </tr>
           </tbody>
         </table>
@@ -230,20 +226,18 @@ ctx.stroke();</code></pre>
 
     <!-- Tab 6: Performance & Reproduction -->
     <article class="content-card" *ngIf="activeTab === 'perf'">
-      <div class="card-tag">Architecture & Optimization</div>
-      <h2 class="section-heading">Rendering Optimization & Deterministic Reproduction</h2>
+      <div class="card-tag">TREATISE VI • PRECISION & OPTIMIZATION</div>
+      <h2 class="section-heading">Optimization & Reproducibility</h2>
 
       <p class="paragraph">
-        Achieving 60 frames per second with thousands of animated particles in HTML5 Canvas requires deliberate architectural constraints:
+        Sustaining 60 frames per second with thousands of active filaments while guaranteeing bit-for-bit static exports:
       </p>
 
       <ul class="feature-list">
-        <li><strong>Fixed Pre-Allocated Particle Pool:</strong> Zero object allocations take place in the <code>requestAnimationFrame</code> loop. Particles are created once and recycled in-place, eliminating Garbage Collector (GC) micro-stutters.</li>
-        <li><strong>High-DPI Retina Compensation:</strong> The canvas backing store is multiplied by <code>window.devicePixelRatio</code>, while CSS dimensions keep layout intact. This ensures razor-sharp lines on Retina displays without blurry upscaling.</li>
-        <li><strong>Separation of Preview and Export:</strong> In the interactive studio, animation runs continuously at the display's variable refresh rate. For static high-res exports (2K/4K PNG), an offscreen canvas runs an exact sequence of 320 fixed-timestep ticks (<code>dt = 1/60s</code>), guaranteeing bit-for-bit reproducibility independent of when the user clicks.</li>
-        <li><strong>Offline-First IndexedDB:</strong> Compositions are persisted as lightweight JSON configurations (seed, sleep data snapshot, parameters). No massive 10MB images need to be stored to restore an artwork.</li>
+        <li><strong>Zero Allocations in RAF:</strong> Particle arrays are pre-allocated at initialization and recycled in place. No Garbage Collection stutters occur.</li>
+        <li><strong>High-DPI Retina Compensation:</strong> Canvas backing store is scaled by <code>window.devicePixelRatio</code>, rendering hairline paths with etching-press sharpness.</li>
+        <li><strong>Deterministic Offscreen Rendering:</strong> Exports run 320 discrete ticks (<code>dt = 1/60s</code>) on an offscreen canvas, ensuring pixel-perfect reproduction across all displays.</li>
       </ul>
     </article>
   </div>
 </main>
-

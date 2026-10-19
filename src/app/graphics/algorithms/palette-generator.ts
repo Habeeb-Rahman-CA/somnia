@@ -1,6 +1,6 @@
 /**
- * Somnia - Dream Art Color Palettes
- * Curated color themes inspired by nocturnal sleep states and dreaming consciousness.
+ * Somnia - Black & White / Monochromatic Art Palettes
+ * Minimalist, photographic, and ink-wash themes stripped of neon saturation.
  */
 
 import { ColorPalette } from '../../core/models/art-parameters.model';
@@ -8,122 +8,122 @@ import { ColorPalette } from '../../core/models/art-parameters.model';
 export const DREAM_PALETTES: Record<string, ColorPalette> = {
   'midnight-nebula': {
     id: 'midnight-nebula',
-    name: 'Midnight Nebula',
-    description: 'Deep midnight navy with cosmic indigo, soft lavender, and pale cyan filaments.',
-    background: '#070a14',
+    name: 'Nocturne Ink',
+    description: 'Pure obsidian background with stark chalk, bone, and charcoal wash filaments.',
+    background: '#000000',
     particleColors: [
-      '#6366f1', // Indigo
-      '#818cf8', // Periwinkle
-      '#a5b4fc', // Soft Lavender
-      '#67e8f9', // Pale Cyan
-      '#2dd4bf', // Luminous Teal
-      '#c084fc', // Lilac
+      '#ffffff', // Pure white
+      '#f5f5f5', // Chalk
+      '#e5e5e5', // Silver
+      '#a3a3a3', // Mid-gray
+      '#737373', // Graphite
+      '#525252', // Charcoal
     ],
     ambientGradients: [
-      ['#0f172a', '#020617'],
-      ['#1e1b4b', '#090d1f'],
+      ['#1c1c1c', '#000000'],
+      ['#141414', '#000000'],
     ],
-    accentColor: '#38bdf8',
+    accentColor: '#ffffff',
   },
 
   'lucid-lavender': {
     id: 'lucid-lavender',
-    name: 'Lucid Lavender',
-    description: 'Twilight plum background with ethereal lilac, radiant violet, and soft rose trails.',
-    background: '#0d0b1a',
+    name: 'Silver Gelatin',
+    description: 'Darkroom emulsion tones inspired by gelatin silver prints and pale zinc.',
+    background: '#060606',
     particleColors: [
-      '#a78bfa', // Lavender
-      '#c084fc', // Violet
-      '#e879f9', // Orchid
-      '#f472b6', // Soft Rose
-      '#818cf8', // Indigo
-      '#ddd6fe', // Pale Lilac
+      '#ffffff',
+      '#f1f5f9',
+      '#e2e8f0',
+      '#cbd5e1',
+      '#94a3b8',
+      '#64748b',
     ],
     ambientGradients: [
-      ['#2e1065', '#0f0728'],
-      ['#3b0764', '#0d0b1a'],
+      ['#1a1a1a', '#060606'],
+      ['#121212', '#000000'],
     ],
-    accentColor: '#c084fc',
+    accentColor: '#f1f5f9',
   },
 
   'aurora-borealis': {
     id: 'aurora-borealis',
-    name: 'Aurora Borealis',
-    description: 'Deep polar slate with emerald curtains, arctic teal ribbons, and pale mint currents.',
-    background: '#051016',
+    name: 'Sumi-e Wash',
+    description: 'Japanese ink brush aesthetic: deep voids with delicate dilute carbon lines.',
+    background: '#030303',
     particleColors: [
-      '#34d399', // Emerald
-      '#10b981', // Boreal Green
-      '#2dd4bf', // Teal
-      '#06b6d4', // Arctic Blue
-      '#67e8f9', // Pale Cyan
-      '#a7f3d0', // Mint Glow
+      '#fafafa',
+      '#f4f4f5',
+      '#e4e4e7',
+      '#d4d4d8',
+      '#a1a1aa',
+      '#71717a',
     ],
     ambientGradients: [
-      ['#064e3b', '#03191e'],
-      ['#042f2e', '#051016'],
+      ['#171717', '#030303'],
+      ['#0f0f0f', '#000000'],
     ],
-    accentColor: '#2dd4bf',
+    accentColor: '#ffffff',
   },
 
   'deep-rem-cyan': {
     id: 'deep-rem-cyan',
-    name: 'Deep REM Cyan',
-    description: 'Abyssal deep navy with bioluminescent cyan, electric cerulean, and phosphorescent mist.',
-    background: '#040d1a',
+    name: 'Obsidian Mist',
+    description: 'High-contrast monochrome: crystalline platinum highlights across charcoal depths.',
+    background: '#000000',
     particleColors: [
-      '#0284c7', // Cerulean
-      '#0ea5e9', // Sky
-      '#38bdf8', // Light Azure
-      '#7dd3fc', // Ice Blue
-      '#22d3ee', // Electric Cyan
-      '#a5f3fc', // Pale Glaze
+      '#ffffff',
+      '#f8fafc',
+      '#e2e8f0',
+      '#94a3b8',
+      '#475569',
+      '#334155',
     ],
     ambientGradients: [
-      ['#075985', '#02182b'],
-      ['#0c4a6e', '#040d1a'],
+      ['#1e1e1e', '#000000'],
+      ['#111111', '#000000'],
     ],
-    accentColor: '#00f2fe',
+    accentColor: '#ffffff',
   },
 
   'starlight-glow': {
     id: 'starlight-glow',
-    name: 'Starlight Glow',
-    description: 'Velvety obsidian with champagne starlight, warm pale amber, and celestial ivory dust.',
-    background: '#08080f',
+    name: 'Bone & Ash',
+    description: 'Subtle warm ivory, pumice, and scorched ash dust against pitch black.',
+    background: '#050505',
     particleColors: [
-      '#fde047', // Champagne
-      '#facc15', // Gold
-      '#fbbf24', // Warm Amber
-      '#e0e7ff', // Pale Celestial
-      '#fed7aa', // Peach Stardust
-      '#fef08a', // Soft Light
+      '#fafaf9',
+      '#f5f5f4',
+      '#e7e5e4',
+      '#d6d3d1',
+      '#a8a29e',
+      '#78716c',
     ],
     ambientGradients: [
-      ['#271c10', '#0a0a14'],
-      ['#1c1917', '#08080f'],
+      ['#191716', '#050505'],
+      ['#100f0e', '#000000'],
     ],
-    accentColor: '#fde047',
+    accentColor: '#f5f5f4',
   },
 
   'twilight-velvet': {
     id: 'twilight-velvet',
-    name: 'Twilight Velvet',
-    description: 'Dusk charcoal with muted heather, smokey indigo, and dusty moonlight highlights.',
-    background: '#0a0b12',
+    name: 'Etched Graphite',
+    description: 'Architectural line etching with crisp silver-point precision and velvet black.',
+    background: '#070707',
     particleColors: [
-      '#94a3b8', // Slate
-      '#a5b4fc', // Periwinkle
-      '#c4b5fd', // Heather
-      '#cbd5e1', // Moonlight
-      '#64748b', // Dusky Blue
-      '#e2e8f0', // Pearl
+      '#ffffff',
+      '#ededed',
+      '#d1d1d1',
+      '#9e9e9e',
+      '#6b6b6b',
+      '#404040',
     ],
     ambientGradients: [
-      ['#1e293b', '#080b14'],
-      ['#111827', '#0a0b12'],
+      ['#1a1a1a', '#070707'],
+      ['#121212', '#000000'],
     ],
-    accentColor: '#c4b5fd',
+    accentColor: '#ffffff',
   },
 };
 
@@ -159,4 +159,3 @@ export class PaletteGenerator {
     return `rgba(${r}, ${g}, ${b}, ${clampedAlpha})`;
   }
 }
-

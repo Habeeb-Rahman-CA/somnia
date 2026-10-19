@@ -8,28 +8,32 @@
       <div class="overlay-left">
         <div class="sleep-pill" *ngIf="artworkService.currentSleepRecord$ | async as record">
           <span class="pill-dot"></span>
-          <span class="pill-title">{{ record.date }}</span>
-          <span class="pill-divider">•</span>
+          <span class="pill-date">{{ record.date }}</span>
+          <span class="pill-sep">/</span>
           <span class="pill-times">{{ record.bedtime }}–{{ record.wakeTime }}</span>
-          <span class="pill-divider">•</span>
+          <span class="pill-sep">/</span>
           <span class="pill-duration">
-            {{ Math.floor(record.timeInBedMinutes / 60) }}h {{ record.timeInBedMinutes % 60 }}m
+            {{ Math.floor(record.timeInBedMinutes / 60) }}H {{ record.timeInBedMinutes % 60 }}M
           </span>
           <button
             type="button"
             class="pill-explainer-btn"
             (click)="showMappingExplainer = !showMappingExplainer"
-            title="Inspect Sleep Mapping"
-            [attr.aria-expanded]="showMappingExplainer"
+            title="Inspect Sleep Mapping Derivations"
+            aria-label="Inspect Sleep Mapping Derivations"
           >
-            ℹ Mapping Rules
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
           </button>
         </div>
       </div>
 
       <div class="overlay-right">
-        <div class="seed-badge" title="Deterministic Generator Seed">
-          <span class="seed-label">SEED:</span>
+        <div class="seed-badge" title="Deterministic Seed">
+          <span class="seed-label">SEED</span>
           <span class="seed-value">0x{{ params.seed.toString(16).toUpperCase() }}</span>
         </div>
       </div>
@@ -41,14 +45,18 @@
       *ngIf="showMappingExplainer && (artworkService.currentExplanation$ | async) as exp"
     >
       <div class="popover-header">
-        <h3 class="popover-title">Sleep-to-Art Mapping Derivation</h3>
+        <h3 class="popover-title">Circadian Translation Rules</h3>
         <button
           type="button"
           class="popover-close"
           (click)="showMappingExplainer = false"
+          title="Close"
           aria-label="Close mapping info"
         >
-          &times;
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
       <div class="popover-body">
@@ -57,11 +65,11 @@
           <span class="mapping-val">{{ exp.particleCount }}</span>
         </div>
         <div class="mapping-item">
-          <span class="mapping-key">Color Atmosphere</span>
+          <span class="mapping-key">Nocturne Tonal Atmosphere</span>
           <span class="mapping-val">{{ exp.palette }}</span>
         </div>
         <div class="mapping-item">
-          <span class="mapping-key">Trajectory Direction</span>
+          <span class="mapping-key">Flow Orientation</span>
           <span class="mapping-val">{{ exp.directionBias }}</span>
         </div>
         <div class="mapping-item">
@@ -69,11 +77,11 @@
           <span class="mapping-val">{{ exp.noiseScale }}</span>
         </div>
         <div class="mapping-item">
-          <span class="mapping-key">Fluid Velocity</span>
+          <span class="mapping-key">Current Velocity</span>
           <span class="mapping-val">{{ exp.flowStrength }}</span>
         </div>
         <div class="mapping-item">
-          <span class="mapping-key">Dream Waves</span>
+          <span class="mapping-key">Wave Undulation</span>
           <span class="mapping-val">{{ exp.waveAmplitude }}</span>
         </div>
         <div class="mapping-item">
@@ -83,83 +91,107 @@
       </div>
     </aside>
 
-    <!-- Floating Action Dock -->
+    <!-- Floating Minimalist Icon-Only Action Dock -->
     <nav class="canvas-dock" aria-label="Artwork controls dock">
       <div class="dock-inner">
-        <!-- Play / Pause -->
+        <!-- Play / Pause (Icon Only) -->
         <button
           type="button"
-          class="dock-btn"
+          class="dock-icon-btn"
           [class.active]="isPaused"
           (click)="togglePause()"
-          title="Pause / Resume Animation (Space)"
+          [title]="isPaused ? 'Resume (Space)' : 'Pause (Space)'"
           [attr.aria-label]="isPaused ? 'Resume animation' : 'Pause animation'"
         >
-          <span class="dock-icon">{{ isPaused ? '▶' : '⏸' }}</span>
-          <span class="dock-text">{{ isPaused ? 'Resume' : 'Pause' }}</span>
+          <svg *ngIf="!isPaused" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="6" y="4" width="4" height="16" />
+            <rect x="14" y="4" width="4" height="16" />
+          </svg>
+          <svg *ngIf="isPaused" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
         </button>
 
-        <!-- Regenerate Seed -->
+        <!-- Regenerate Seed (Icon Only) -->
         <button
           type="button"
-          class="dock-btn"
+          class="dock-icon-btn"
           (click)="regenerateSeed()"
           title="Regenerate Seed (R)"
-          aria-label="Generate new random seed"
+          aria-label="Regenerate Seed"
         >
-          <span class="dock-icon">↺</span>
-          <span class="dock-text">Regenerate</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19" />
+          </svg>
         </button>
 
-        <!-- Parameter Controls Drawer Toggle -->
+        <!-- Parameter Controls Drawer Toggle (Icon Only) -->
         <button
           type="button"
-          class="dock-btn"
+          class="dock-icon-btn"
           [class.active]="showControlsDrawer"
           (click)="showControlsDrawer = !showControlsDrawer"
-          title="Customize Visual Parameters"
+          title="Adjust Visual Parameters"
+          aria-label="Adjust Visual Parameters"
           [attr.aria-expanded]="showControlsDrawer"
         >
-          <span class="dock-icon">⚙</span>
-          <span class="dock-text">Adjust</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="4" y1="21" x2="4" y2="14" />
+            <line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" />
+            <line x1="20" y1="12" x2="20" y2="3" />
+            <line x1="1" y1="14" x2="7" y2="14" />
+            <line x1="9" y1="8" x2="15" y2="8" />
+            <line x1="17" y1="16" x2="23" y2="16" />
+          </svg>
         </button>
 
-        <!-- Reset Settings -->
+        <!-- Reset Settings (Icon Only) -->
         <button
           type="button"
-          class="dock-btn"
+          class="dock-icon-btn"
           (click)="resetToSleepDefaults()"
-          title="Reset to Sleep-Derived Defaults"
-          aria-label="Reset visual parameters to sleep defaults"
+          title="Reset to Sleep Defaults"
+          aria-label="Reset to Sleep Defaults"
         >
-          <span class="dock-icon">⟲</span>
-          <span class="dock-text">Reset</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
         </button>
 
-        <div class="dock-separator"></div>
+        <div class="dock-sep"></div>
 
-        <!-- Save to Gallery -->
+        <!-- Save to Gallery (Icon Only) -->
         <button
           type="button"
-          class="dock-btn dock-btn-highlight"
+          class="dock-icon-btn"
           (click)="openSaveModal()"
-          title="Save Artwork to Gallery"
-          aria-label="Save composition to gallery"
+          title="Save Composition to Archive"
+          aria-label="Save Composition to Archive"
         >
-          <span class="dock-icon">💾</span>
-          <span class="dock-text">Save</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
         </button>
 
-        <!-- Export Artwork -->
+        <!-- Export Artwork (Icon Only) -->
         <button
           type="button"
-          class="dock-btn dock-btn-export"
+          class="dock-icon-btn dock-icon-btn-primary"
           (click)="openExportModal()"
-          title="Export High-Resolution Image"
-          aria-label="Export high resolution artwork"
+          title="Export High-Resolution Render"
+          aria-label="Export High-Resolution Render"
         >
-          <span class="dock-icon">⤓</span>
-          <span class="dock-text">Export</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
         </button>
       </div>
     </nav>
@@ -174,23 +206,27 @@
   >
     <header class="drawer-header">
       <div class="drawer-header-title">
-        <h2 class="drawer-title">Generative Parameters</h2>
-        <span class="drawer-desc">Fine-tune the mathematical simulation</span>
+        <h2 class="drawer-title">Composition Variables</h2>
+        <span class="drawer-desc">FORM & EQUATIONS</span>
       </div>
       <button
         type="button"
-        class="drawer-close"
+        class="drawer-close-btn"
         (click)="showControlsDrawer = false"
+        title="Close Drawer"
         aria-label="Close parameters drawer"
       >
-        &times;
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
       </button>
     </header>
 
     <div class="drawer-body">
-      <!-- Color Palette Picker -->
+      <!-- Monochromatic Theme Palette Picker -->
       <section class="param-section">
-        <label class="param-label">Color Palette Theme</label>
+        <label class="param-label">Tonal Theme</label>
         <div class="palettes-grid">
           <button
             type="button"
@@ -214,7 +250,7 @@
       <!-- Particle Count -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="particleCount" class="param-label">Particle Count</label>
+          <label for="particleCount" class="param-label">Filament Density</label>
           <span class="slider-value">{{ params.particleCount }}</span>
         </div>
         <input
@@ -227,13 +263,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Number of simultaneous tracer filaments in simulation.</span>
+        <span class="slider-subtext">Number of simultaneous tracer trajectories.</span>
       </div>
 
       <!-- Noise Scale -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="noiseScale" class="param-label">Noise Scale (Frequency)</label>
+          <label for="noiseScale" class="param-label">Simplex Frequency</label>
           <span class="slider-value">{{ params.noiseScale.toFixed(4) }}</span>
         </div>
         <input
@@ -246,13 +282,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Lower = broad sweeping currents; Higher = tight complex eddies.</span>
+        <span class="slider-subtext">Spatial scale of continuous 2D simplicial grid.</span>
       </div>
 
       <!-- Flow Strength -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="flowStrength" class="param-label">Flow Strength (Speed)</label>
+          <label for="flowStrength" class="param-label">Current Velocity</label>
           <span class="slider-value">{{ params.flowStrength.toFixed(1) }}</span>
         </div>
         <input
@@ -265,13 +301,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Linear particle velocity along vector lines.</span>
+        <span class="slider-subtext">Linear particle translation speed.</span>
       </div>
 
       <!-- Line Opacity -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="lineOpacity" class="param-label">Line Opacity</label>
+          <label for="lineOpacity" class="param-label">Silver Point Opacity</label>
           <span class="slider-value">{{ params.lineOpacity.toFixed(2) }}</span>
         </div>
         <input
@@ -284,13 +320,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Transparency of individual tracer segments.</span>
+        <span class="slider-subtext">Individual filament ink density.</span>
       </div>
 
       <!-- Trail Fade Rate -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="trailFadeRate" class="param-label">Trail Fade Rate</label>
+          <label for="trailFadeRate" class="param-label">Dissolution Rate</label>
           <span class="slider-value">{{ params.trailFadeRate.toFixed(2) }}</span>
         </div>
         <input
@@ -303,13 +339,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Lower = persistent luminous trails; Higher = ephemeral sparks.</span>
+        <span class="slider-subtext">Temporal persistence of fading trajectories.</span>
       </div>
 
       <!-- Wave Amplitude -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="waveAmplitude" class="param-label">Wave Amplitude</label>
+          <label for="waveAmplitude" class="param-label">Harmonic Wave</label>
           <span class="slider-value">{{ params.waveAmplitude.toFixed(2) }}</span>
         </div>
         <input
@@ -322,13 +358,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Harmonic undulation applied across vector angles.</span>
+        <span class="slider-subtext">Trigonometric curvature superimposed onto vector angles.</span>
       </div>
 
       <!-- Curl Strength -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="curlStrength" class="param-label">Curl Turbulence</label>
+          <label for="curlStrength" class="param-label">Incompressible Curl</label>
           <span class="slider-value">{{ params.curlStrength.toFixed(2) }}</span>
         </div>
         <input
@@ -341,13 +377,13 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Incompressible rotational swirl (divergence-free flow).</span>
+        <span class="slider-subtext">Divergence-free fluid rotational swirl.</span>
       </div>
 
       <!-- Background Layers -->
       <div class="slider-group">
         <div class="slider-header">
-          <label for="layerDensity" class="param-label">Atmospheric Ribbons</label>
+          <label for="layerDensity" class="param-label">Contour Strata</label>
           <span class="slider-value">{{ params.layerDensity }}</span>
         </div>
         <input
@@ -360,7 +396,7 @@
           (ngModelChange)="onParameterChange()"
           class="slider"
         />
-        <span class="slider-subtext">Deep contour ribbon strata rendered in background.</span>
+        <span class="slider-subtext">Atmospheric background ribbon contours.</span>
       </div>
     </div>
   </aside>
@@ -375,44 +411,60 @@
   >
     <div class="modal-card">
       <header class="modal-header">
-        <h3 id="saveModalTitle" class="modal-title">Save Artwork to Gallery</h3>
+        <h3 id="saveModalTitle" class="modal-title">Archive Composition</h3>
+        <button
+          type="button"
+          class="modal-close-icon"
+          (click)="showSaveModal = false"
+          title="Close"
+          aria-label="Close"
+        >
+          ✕
+        </button>
       </header>
       <div class="modal-body">
         <div class="form-group">
-          <label for="artworkTitle" class="form-label">Composition Title</label>
+          <label for="artworkTitle" class="form-label">Catalog Title</label>
           <input
             id="artworkTitle"
             type="text"
             class="form-control"
             [(ngModel)]="artworkTitle"
-            placeholder="e.g. Cerulean Reverie"
+            placeholder="e.g. Nocturne No. 7"
           />
         </div>
-        <div class="form-group" style="margin-top: 1rem;">
-          <label for="artworkNotes" class="form-label">Reflection Notes (Optional)</label>
+        <div class="form-group" style="margin-top: 1.25rem;">
+          <label for="artworkNotes" class="form-label">Catalog Annotation (Optional)</label>
           <textarea
             id="artworkNotes"
             class="form-control"
             rows="3"
             [(ngModel)]="artworkNotes"
-            placeholder="Reflections on this sleep state or visual mood..."
+            placeholder="Reflections on this sleep state..."
           ></textarea>
         </div>
       </div>
       <footer class="modal-actions">
         <button
           type="button"
-          class="btn btn-secondary"
+          class="btn-icon-labeled"
           (click)="showSaveModal = false"
+          title="Dismiss"
         >
-          Cancel
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn-icon-labeled btn-primary"
           (click)="confirmSaveArtwork()"
+          title="Archive Composition"
         >
-          Save Artwork
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </button>
       </footer>
     </div>
@@ -428,15 +480,24 @@
   >
     <div class="modal-card">
       <header class="modal-header">
-        <h3 id="exportModalTitle" class="modal-title">Export Deterministic Artwork</h3>
+        <h3 id="exportModalTitle" class="modal-title">Export Fine Print</h3>
+        <button
+          type="button"
+          class="modal-close-icon"
+          (click)="showExportModal = false"
+          title="Close"
+          aria-label="Close"
+        >
+          ✕
+        </button>
       </header>
       <div class="modal-body">
         <p class="export-note">
-          Somnia renders the export offscreen using a deterministic fixed-step simulation. The downloaded image will match this exact composition with zero distortion.
+          Somnia evaluates the simulation on an offscreen target using 320 fixed deterministic steps. The exported image matches this exact composition with museum-grade precision.
         </p>
 
-        <div class="form-group" style="margin-top: 1rem;">
-          <label class="form-label">File Format</label>
+        <div class="form-group" style="margin-top: 1.25rem;">
+          <label class="form-label">Medium Format</label>
           <div class="format-options">
             <label class="radio-label">
               <input
@@ -445,7 +506,7 @@
                 value="png"
                 [(ngModel)]="exportFormat"
               />
-              High-Res PNG (Raster with Ambient Glow)
+              Monochrome PNG (Raster Print with Atmospheric Shading)
             </label>
             <label class="radio-label">
               <input
@@ -454,13 +515,13 @@
                 value="svg"
                 [(ngModel)]="exportFormat"
               />
-              Genuine Vector SVG (Scalable XML Paths)
+              Genuine Vector SVG (Resolution-Independent Paths)
             </label>
           </div>
         </div>
 
-        <div class="form-group" *ngIf="exportFormat === 'png'" style="margin-top: 1rem;">
-          <label class="form-label">Target Resolution</label>
+        <div class="form-group" *ngIf="exportFormat === 'png'" style="margin-top: 1.25rem;">
+          <label class="form-label">Print Resolution</label>
           <div class="format-options">
             <label class="radio-label">
               <input
@@ -487,23 +548,30 @@
       <footer class="modal-actions">
         <button
           type="button"
-          class="btn btn-secondary"
+          class="btn-icon-labeled"
           (click)="showExportModal = false"
           [disabled]="isExporting"
+          title="Dismiss"
         >
-          Cancel
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn-icon-labeled btn-primary"
           (click)="executeExport()"
           [disabled]="isExporting"
+          title="Download Print"
         >
-          <span *ngIf="!isExporting">Download {{ exportFormat.toUpperCase() }}</span>
-          <span *ngIf="isExporting">Generating...</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
         </button>
       </footer>
     </div>
   </div>
 </main>
-

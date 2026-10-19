@@ -1,30 +1,37 @@
 <main class="gallery-page">
   <div class="gallery-container">
     <header class="gallery-header">
-      <div class="header-badge">Archive</div>
-      <h1 class="gallery-title">Personal Dream Gallery</h1>
+      <span class="header-numeral">EXHIBITION ARCHIVE</span>
+      <h1 class="gallery-title">Monochrome Portfolio</h1>
       <p class="gallery-subtitle">
-        Your library of saved generative artwork. Every piece stores its deterministic seed and mathematical configuration for pixel-perfect reproduction.
+        Every composition is preserved through its deterministic seed and procedural parameters for exact physical and vector reproduction.
       </p>
     </header>
 
     <!-- Empty State -->
     <section class="empty-state" *ngIf="artworks.length === 0">
-      <div class="empty-icon" aria-hidden="true">✦</div>
-      <h2 class="empty-title">Your Gallery is Awaiting Its First Dream</h2>
+      <div class="empty-glyph" aria-hidden="true">✦</div>
+      <h2 class="empty-title">The Archive Lies Dormant</h2>
       <p class="empty-desc">
-        Save artworks created from your sleep records in the Studio, or generate a sample composition to explore the gallery.
+        Record a sleep session or enter the studio to generate and catalog your initial piece.
       </p>
       <div class="empty-actions">
-        <a routerLink="/sleep-entry" class="btn btn-primary">
-          ☾ Log Sleep Data
+        <a routerLink="/sleep-entry" class="btn-icon-circle" title="Record Sleep" aria-label="Record Sleep">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
         </a>
         <button
           type="button"
-          class="btn btn-secondary"
+          class="btn-icon-circle btn-primary"
           (click)="createSampleArtwork()"
+          title="Generate Archive Sample"
+          aria-label="Generate Archive Sample"
         >
-          ✦ Generate Sample Artwork
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
         </button>
       </div>
     </section>
@@ -66,23 +73,23 @@
 
           <div class="card-meta">
             <div class="meta-row" *ngIf="art.sleepRecord">
-              <span class="meta-label">Sleep:</span>
+              <span class="meta-label">SLEEP:</span>
               <span class="meta-value">
                 {{ art.sleepRecord.date }} ({{ Math.floor(art.sleepRecord.timeInBedMinutes / 60) }}h {{ art.sleepRecord.timeInBedMinutes % 60 }}m)
               </span>
             </div>
 
             <div class="meta-row">
-              <span class="meta-label">Seed:</span>
+              <span class="meta-label">SEED:</span>
               <span class="meta-value font-mono">
                 0x{{ art.seed.toString(16).toUpperCase() }}
               </span>
             </div>
 
             <div class="meta-row">
-              <span class="meta-label">Created:</span>
+              <span class="meta-label">DATE:</span>
               <span class="meta-value">
-                {{ art.createdAt | date: 'mediumDate' }}
+                {{ art.createdAt | date: 'yyyy.MM.dd' }}
               </span>
             </div>
           </div>
@@ -91,30 +98,44 @@
             "{{ art.notes }}"
           </div>
 
+          <!-- Minimalist Icon-Only Card Actions -->
           <footer class="card-actions">
             <button
               type="button"
-              class="card-btn card-btn-reproduce"
+              class="card-action-icon-btn"
               title="Reproduce in Studio"
+              aria-label="Reproduce in Studio"
               (click)="reproduce(art); $event.stopPropagation()"
             >
-              ⟲ Reproduce
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
             </button>
             <button
               type="button"
-              class="card-btn"
-              title="Export 2K PNG"
+              class="card-action-icon-btn"
+              title="Export Print"
+              aria-label="Export Print"
               (click)="exportDirect(art, $event)"
             >
-              ⤓ Export
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
             </button>
             <button
               type="button"
-              class="card-btn card-btn-danger"
-              title="Delete Artwork"
+              class="card-action-icon-btn card-action-danger"
+              title="Delete from Archive"
+              aria-label="Delete from Archive"
               (click)="promptDelete(art, $event)"
             >
-              ✕
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
             </button>
           </footer>
         </div>
@@ -125,13 +146,12 @@
   <!-- Deletion Confirmation Modal -->
   <app-confirmation-modal
     [isOpen]="showDeleteModal"
-    title="Delete Artwork"
-    [message]="'Are you sure you want to delete \'' + (selectedForDeletion?.title || 'this artwork') + '\'? This action cannot be undone.'"
-    confirmLabel="Delete Permanently"
-    cancelLabel="Keep Artwork"
+    title="Expunge Record"
+    [message]="'Confirm removal of \'' + (selectedForDeletion?.title || 'composition') + '\' from the local archive. This action is irreversible.'"
+    confirmLabel="Delete"
+    cancelLabel="Cancel"
     [isDanger]="true"
     (confirm)="confirmDelete()"
     (cancel)="cancelDelete()"
   ></app-confirmation-modal>
 </main>
-

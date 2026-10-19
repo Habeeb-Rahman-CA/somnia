@@ -16,7 +16,6 @@ import { ToastService, ToastMessage } from './toast.service';
       <div
         *ngFor="let toast of toastService.toasts$ | async"
         class="toast-item"
-        [ngClass]="'toast-' + toast.type"
         role="alert"
       >
         <span class="toast-dot"></span>
@@ -49,55 +48,44 @@ import { ToastService, ToastMessage } from './toast.service';
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        background: rgba(13, 17, 31, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(12px);
-        color: #f1f5f9;
-        padding: 0.75rem 1.25rem;
-        border-radius: 9999px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.2);
-        font-size: 0.875rem;
+        background: rgba(10, 10, 10, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(20px);
+        color: #ffffff;
+        padding: 0.65rem 1.15rem;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8);
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
         animation: toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .toast-dot {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
-        background: #818cf8;
-      }
-      .toast-success .toast-dot {
-        background: #34d399;
-        box-shadow: 0 0 8px #34d399;
-      }
-      .toast-warning .toast-dot {
-        background: #facc15;
-        box-shadow: 0 0 8px #facc15;
-      }
-      .toast-info .toast-dot {
-        background: #38bdf8;
-        box-shadow: 0 0 8px #38bdf8;
+        background: #ffffff;
       }
       .toast-close {
         background: transparent;
         border: none;
-        color: #94a3b8;
-        font-size: 1.25rem;
+        color: #777777;
+        font-size: 1.1rem;
         line-height: 1;
         cursor: pointer;
-        padding: 0 0.25rem;
+        padding: 0 0.2rem;
         transition: color 0.15s;
       }
       .toast-close:hover {
-        color: #fff;
+        color: #ffffff;
       }
       @keyframes toastIn {
         from {
           opacity: 0;
-          transform: translateY(12px) scale(0.96);
+          transform: translateY(8px);
         }
         to {
           opacity: 1;
-          transform: translateY(0) scale(1);
+          transform: translateY(0);
         }
       }
     `,
@@ -106,4 +94,3 @@ import { ToastService, ToastMessage } from './toast.service';
 export class ToastComponent {
   public toastService = inject(ToastService);
 }
-
